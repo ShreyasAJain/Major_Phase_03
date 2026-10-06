@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        AGV Phase 3
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <header class="header">
+
+        <div>
+
+            <div class="eyebrow">
+                AUTOMATED GUIDED VEHICLE
+            </div>
+
+            <h1>
+                AGV Phase 3
+            </h1>
+
+            <div class="subtitle">
+                ESP32 • MQTT • 8-Array IR Navigation
+            </div>
+
+        </div>
+
+        <!-- ================================================= -->
+        <!-- CONNECTION -->
+        <!-- ================================================= -->
+
+        <div class="connection-box">
+
+            <div class="connection-row">
+
+                <span
+                    class="status-dot"
+                    id="mqttDot"
+                ></span>
+
+                <span>
+                    MQTT
+                </span>
+
+                <strong id="mqttStatus">
+                    DISCONNECTED
+                </strong>
+
+            </div>
+
+            <div class="connection-row">
+
+                <span
+                    class="status-dot"
+                    id="espDot"
+                ></span>
+
+                <span>
+                    ESP32
+                </span>
+
+                <strong id="espStatus">
+                    DISCONNECTED
+                </strong>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ================================================= -->
+    <!-- MAIN GRID -->
+    <!-- ================================================= -->
+
+    <main class="grid">
+
+        <!-- ================================================= -->
+        <!-- CONTROL -->
+        <!-- ================================================= -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <div class="label">
+                        OPERATION
+                    </div>
+
+                    <h2>
+                        AGV Control
+                    </h2>
+
+                </div>
+
+                <div
+                    class="state"
+                    id="stateBadge"
+                >
+                    OFFLINE
+                </div>
+
+            </div>
+
+            <!-- ================================================= -->
+            <!-- CONTROL BUTTONS -->
+            <!-- ================================================= -->
+
+            <div class="controls">
+
+                <button
+                    class="control start"
+                    onclick="startAGV()"
+                >
+
+                    <span>
+                        ▶
+                    </span>
+
+                    START
+
+                </button>
+
+                <button
+                    class="control stop"
+                    onclick="stopAGV()"
+                >
+
+                    <span>
+                        ■
+                    </span>
+
+                    STOP
+
+                </button>
+
+                <button
+                    class="control resume"
+                    onclick="resumeAGV()"
+                >
+
+                    <span>
+                        ▶
+                    </span>
+
+                    RESUME
+
+                </button>
+
+                <button
+                    class="control reset"
+                    onclick="resetAGV()"
+                >
+
+                    <span>
+                        ↻
+                    </span>
+
+                    RESET
+
+                </button>
+
+            </div>
+
+            <!-- ================================================= -->
+            <!-- INFO -->
+            <!-- ================================================= -->
+
+            <div class="info-grid">
+
+                <div class="info">
+
+                    <small>
+                        LINE FOLLOWING
+                    </small>
+
+                    <strong
+                        id="lineFollowing"
+                    >
+                        OFF
+                    </strong>
+
+                </div>
+
+                <div class="info">
+
+                    <small>
+                        LAST COMMAND
+                    </small>
+
+                    <strong
+                        id="lastCommand"
+                    >
+                        NONE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- IR -->
+        <!-- ================================================= -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <div class="label">
+                        NAVIGATION
+                    </div>
+
+                    <h2>
+                        8-Array IR Sensor
+                    </h2>
+
+                </div>
+
+                <div class="live">
+                    ● LIVE
+                </div>
+
+            </div>
+
+            <!-- ================================================= -->
+            <!-- SENSORS -->
+            <!-- ================================================= -->
+
+            <div class="sensors">
+
+                <div class="sensor">
+
+                    <small>
+                        S1
+                    </small>
+
+                    <strong id="S1">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S2
+                    </small>
+
+                    <strong id="S2">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S3
+                    </small>
+
+                    <strong id="S3">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S4
+                    </small>
+
+                    <strong id="S4">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S5
+                    </small>
+
+                    <strong id="S5">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S6
+                    </small>
+
+                    <strong id="S6">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S7
+                    </small>
+
+                    <strong id="S7">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="sensor">
+
+                    <small>
+                        S8
+                    </small>
+
+                    <strong id="S8">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="sensor-direction">
+
+                <span>
+                    LEFT
+                </span>
+
+                <div class="sensor-line"></div>
+
+                <span>
+                    RIGHT
+                </span>
+
+            </div>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- MANUAL -->
+        <!-- ================================================= -->
+
+        <section class="card full">
+
+            <div class="card-header">
+
+                <div>
+
+                    <div class="label">
+                        OPTIONAL
+                    </div>
+
+                    <h2>
+                        Manual Mode
+                    </h2>
+
+                </div>
+
+                <button
+                    class="toggle"
+                    id="manualToggle"
+                    onclick="toggleManualMode()"
+                >
+                    SHOW MANUAL
+                </button>
+
+            </div>
+
+            <div
+                id="manualContent"
+                class="manual-content"
+            >
+
+                <p class="warning">
+                    Manual mode directly controls the motors.
+                    Use only when required.
+                </p>
+
+                <div class="dpad">
+
+                    <!-- FORWARD -->
+
+                    <button
+                        class="dpad-button up"
+                        onclick="manualCommand('MANUAL_FORWARD')"
+                    >
+
+                        ▲
+
+                        <small>
+                            FORWARD
+                        </small>
+
+                    </button>
+
+                    <!-- LEFT -->
+
+                    <button
+                        class="dpad-button left"
+                        onclick="manualCommand('MANUAL_LEFT')"
+                    >
+
+                        ◀
+
+                        <small>
+                            LEFT
+                        </small>
+
+                    </button>
+
+                    <!-- STOP -->
+
+                    <button
+                        class="dpad-button middle"
+                        onclick="manualCommand('MANUAL_STOP')"
+                    >
+
+                        ■
+
+                        <small>
+                            STOP
+                        </small>
+
+                    </button>
+
+                    <!-- RIGHT -->
+
+                    <button
+                        class="dpad-button right"
+                        onclick="manualCommand('MANUAL_RIGHT')"
+                    >
+
+                        ▶
+
+                        <small>
+                            RIGHT
+                        </small>
+
+                    </button>
+
+                    <!-- BACKWARD -->
+
+                    <button
+                        class="dpad-button down"
+                        onclick="manualCommand('MANUAL_BACKWARD')"
+                    >
+
+                        ▼
+
+                        <small>
+                            BACKWARD
+                        </small>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================================================= -->
+    <!-- SENSOR / LOAD INFORMATION -->
+    <!-- ================================================= -->
+
+    <section class="card full">
+
+        <div class="card-header">
+
+            <div>
+
+                <div class="label">
+                    LIVE TELEMETRY
+                </div>
+
+                <h2>
+                    AGV Sensors
+                </h2>
+
+            </div>
+
+            <div class="live">
+                ● LIVE
+            </div>
+
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info">
+
+                <small>
+                    WEIGHT
+                </small>
+
+                <strong id="weight">
+                    0.00 kg
+                </strong>
+
+            </div>
+
+            <div class="info">
+
+                <small>
+                    LOAD STATUS
+                </small>
+
+                <strong id="weightStatus">
+                    WAITING
+                </strong>
+
+            </div>
+
+            <div class="info">
+
+                <small>
+                    FRONT ULTRASONIC
+                </small>
+
+                <strong id="ultrasonicFront">
+                    0 cm
+                </strong>
+
+            </div>
+
+            <div class="info">
+
+                <small>
+                    LEFT ULTRASONIC
+                </small>
+
+                <strong id="ultrasonicLeft">
+                    0 cm
+                </strong>
+
+            </div>
+
+            <div class="info">
+
+                <small>
+                    RIGHT ULTRASONIC
+                </small>
+
+                <strong id="ultrasonicRight">
+                    0 cm
+                </strong>
+
+            </div>
+
+            <div class="info">
+
+                <small>
+                    BACKTRACKING
+                </small>
+
+                <strong id="backtrackingStatus">
+                    INACTIVE
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div
+        class="update"
+        id="lastUpdate"
+    >
+        Last update: --
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>

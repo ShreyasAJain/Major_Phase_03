@@ -1,0 +1,13 @@
+{
+  "name": "agv-control-system",
+  "version": "1.0.0",
+  "description": "AGV Phase 3 control website and ESP32 MQTT system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mqtt": "^5.14.0"
+  }
+}
